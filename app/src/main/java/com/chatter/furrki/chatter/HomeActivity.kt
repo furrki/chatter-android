@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity() {
         loadRooms()
         roomList.onItemClickListener = AdapterView.OnItemClickListener { l, v, pos, id ->
             val intent = Intent(this, ChatActivity::class.java)
-            intent.putExtra("chatid", listViewAdapter!!.getItem(pos))
+            intent.putExtra("chatId", listViewAdapter!!.getItem(pos)!!.objectId)
             startActivity(intent)
         }
     }

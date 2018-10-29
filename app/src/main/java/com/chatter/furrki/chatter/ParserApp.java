@@ -11,6 +11,7 @@ public class ParserApp extends Application {
         super.onCreate();
         ParseObject.registerSubclass(Room.class);
         ParseObject.registerSubclass(User.class);
+        ParseObject.registerSubclass(Message.class);
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getString(R.string.parse_app_id))
                 // if defined
