@@ -18,7 +18,7 @@ import com.parse.livequery.SubscriptionHandling
 class HomeActivity : AppCompatActivity() {
 
     private var listViewAdapter: RoomListViewAdapter? = null
-    private var persons: ArrayList<ParseUser>? = null
+    private var persons: ArrayList<Room>? = null
     lateinit var roomList: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,11 @@ class HomeActivity : AppCompatActivity() {
 
         initialize()
         loadRooms()
-
+        roomList.onItemClickListener = AdapterView.OnItemClickListener { l, v, pos, id ->
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra("chatid", listViewAdapter!!.getItem(pos))
+            startActivity(intent)
+        }
     }
 
     private fun initialize() {
@@ -40,18 +44,12 @@ class HomeActivity : AppCompatActivity() {
 
         val parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient()
 
-        var parseQuery = ParseQuery.getQuery<ParseObject>("Room")
+        var parseQuery = ParseQuery.getQuery<Room>("Room")
         var subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { query, room ->
-            val members = room.get("Members") as ArrayList<ParseUser>
-            var other = ParseUser.getCurrentUser()
-            if(members.get(0).objectId == other.objectId){
-                other = members[1]
-            } else {
-                other = members[0]
-            }
-            addRoom(other)
+
+            addRoom(room)
         }
     }
     fun loadRooms(){
@@ -62,14 +60,8 @@ class HomeActivity : AppCompatActivity() {
         query.findInBackground { rooms, e ->
             if (e == null) {
                 for (room: Room in rooms) {
-                    val members = room.getMembers()
-                    var other = ParseUser.getCurrentUser()
-                    if(members.get(0).objectId == other.objectId){
-                        other = members[1]
-                    } else {
-                        other = members[0]
-                    }
-                    addRoom(other)
+
+                    addRoom(room)
                 }
             } else {
                 Log.d("err", "Error: " + e.message)
@@ -77,10 +69,8 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    fun addRoom(other: ParseUser){
-        other.fetchIfNeeded()
-        persons!!.add(other)
-        Log.d("Other", other.username)
+    fun addRoom(room: Room){
+        persons!!.add(room)
         runOnUiThread {
             listViewAdapter!!.notifyDataSetChanged()
         }
