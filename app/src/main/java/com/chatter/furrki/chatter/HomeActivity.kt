@@ -55,14 +55,14 @@ class HomeActivity : AppCompatActivity() {
         }
     }
     fun loadRooms(){
-        val query = ParseQuery.getQuery<ParseObject>("Room")
+        val query = ParseQuery.getQuery<Room>("Room")
         query.include("User")
         Log.d("aa", ParseUser.getCurrentUser().username)
         query.whereEqualTo("Members", ParseUser.getCurrentUser())
         query.findInBackground { rooms, e ->
             if (e == null) {
-                for (room: ParseObject in rooms) {
-                    val members = room.get("Members") as ArrayList<ParseUser>
+                for (room: Room in rooms) {
+                    val members = room.getMembers()
                     var other = ParseUser.getCurrentUser()
                     if(members.get(0).objectId == other.objectId){
                         other = members[1]
@@ -74,7 +74,7 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 Log.d("err", "Error: " + e.message)
             }
-        } 
+        }
     }
 
     fun addRoom(other: ParseUser){
@@ -96,11 +96,16 @@ class HomeActivity : AppCompatActivity() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.main_menu_add_chat -> {
+                val intent = Intent(this,AddChat::class.java)
+                startActivity(intent)
+                return true
+            }
             R.id.main_menu_logout -> {
                 ParseUser.logOut()
                 val intent = Intent(this,MainActivity::class.java)
-                intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
                 startActivity(intent)
+                finish()
                 return true
             }
         }

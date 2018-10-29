@@ -2,8 +2,10 @@ package com.chatter.furrki.chatter
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var username: EditText
     lateinit var password: EditText
     lateinit var register: TextView
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         val user = ParseUser.getCurrentUser()
         if(user != null && user.isAuthenticated){
             val intent = Intent(this,HomeActivity::class.java)
-            intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
             startActivity(intent)
+            finish()
         }
 
         username = findViewById(R.id.loginUsername)
@@ -39,8 +42,9 @@ class MainActivity : AppCompatActivity() {
             ParseUser.logInInBackground(username.text.toString(), password.text.toString()) { user, e ->
                 if (user != null) {
                     val intent = Intent(this,HomeActivity::class.java)
-                    intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
                     startActivity(intent)
+                    finish()
+
                 } else {
                     e.printStackTrace()
                 }
@@ -49,7 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         register.setOnClickListener{
             val intent = Intent(this, RegisterActivity::class.java)
-
             startActivity(intent)
         }
 

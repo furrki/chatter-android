@@ -2,8 +2,8 @@ package com.chatter.furrki.chatter
 
 import com.parse.ParseClassName
 import com.parse.ParseUser
-@ParseClassName("User")
-class User: ParseUser() {
+@ParseClassName("_User")
+public class User: ParseUser() {
     init {
 
     }
@@ -13,5 +13,7 @@ class User: ParseUser() {
     fun Pu(pu: ParseUser){
         this.let { pu }
     }
-
+    fun getQuery(): Unit{
+        return this.getQuery()
+    }
 }
