@@ -1,4 +1,4 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,11 +8,10 @@ import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SearchView
 import com.parse.ParseUser
-import com.parse.FindCallback
-import com.parse.ParseException
-import com.parse.ParseQuery
 import android.widget.Toast
-import com.parse.ParseObject
+import com.chatter.furrki.chatter.Adapters.UsersListViewAdapter
+import com.chatter.furrki.chatter.Models.User
+import com.chatter.furrki.chatter.R
 import com.parse.FunctionCallback
 import com.parse.ParseCloud
 

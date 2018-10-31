@@ -28,20 +28,20 @@
         android:theme="@style/Theme.MaterialComponents.Light">
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".Activities.HomeActivity" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Activities.RegisterActivity"
             android:label="@string/title_activity_register" />
-        <activity android:name=".AddChat" />
+        <activity android:name=".Activities.AddChat" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".Activities.ChatActivity"
             android:windowSoftInputMode="adjustPan" />
     </application>
 

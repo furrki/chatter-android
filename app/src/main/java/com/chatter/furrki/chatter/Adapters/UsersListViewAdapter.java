@@ -1,4 +1,4 @@
-package com.chatter.furrki.chatter;
+package com.chatter.furrki.chatter.Adapters;
 
 import android.content.Context;
         import android.view.LayoutInflater;
@@ -6,7 +6,11 @@ import android.content.Context;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.TextView;
-        import java.util.ArrayList;
+
+import com.chatter.furrki.chatter.R;
+import com.chatter.furrki.chatter.Models.User;
+
+import java.util.ArrayList;
         import java.util.List;
         import java.util.Locale;
 

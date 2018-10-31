@@ -1,12 +1,11 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.Toolbar
-import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import com.chatter.furrki.chatter.R
 import com.parse.ParseUser
 
 
@@ -37,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
                 user.signUpInBackground { e ->
                     if (e == null) {
                         toast("Registered!")
-                        val intent = Intent(this,MainActivity::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
                         intent.flags = intent.flags or Intent.FLAG_ACTIVITY_NO_HISTORY
                         startActivity(intent)
                     } else {

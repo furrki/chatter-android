@@ -1,5 +1,8 @@
 package com.chatter.furrki.chatter;
 
+import com.chatter.furrki.chatter.Models.Message;
+import com.chatter.furrki.chatter.Models.Room;
+import com.chatter.furrki.chatter.Models.User;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

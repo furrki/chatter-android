@@ -1,4 +1,4 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Activities
 
 import android.content.Context
 import android.content.Intent
@@ -6,15 +6,12 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.parse.*
+import com.chatter.furrki.chatter.R
 import com.parse.ParseUser
-import com.parse.LogInCallback
 
 class MainActivity : AppCompatActivity() {
     lateinit var username: EditText
@@ -27,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         val user = ParseUser.getCurrentUser()
         if(user != null && user.isAuthenticated){
-            val intent = Intent(this,HomeActivity::class.java)
+            val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -41,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener{
             ParseUser.logInInBackground(username.text.toString(), password.text.toString()) { user, e ->
                 if (user != null) {
-                    val intent = Intent(this,HomeActivity::class.java)
+                    val intent = Intent(this, HomeActivity::class.java)
                     startActivity(intent)
                     finish()
 

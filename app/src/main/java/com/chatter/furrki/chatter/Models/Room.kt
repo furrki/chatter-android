@@ -1,4 +1,4 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Models
 
 import com.parse.ParseClassName
 import com.parse.ParseObject

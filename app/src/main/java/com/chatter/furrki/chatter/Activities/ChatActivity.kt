@@ -1,17 +1,16 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ListView
+import com.chatter.furrki.chatter.Adapters.ChatListViewAdapter
+import com.chatter.furrki.chatter.Models.Message
+import com.chatter.furrki.chatter.R
 import com.parse.ParseObject
-import com.parse.GetCallback
-import com.parse.ParseException
 import com.parse.ParseQuery
-import com.parse.FindCallback
 import com.parse.FunctionCallback
 import com.parse.ParseCloud
 import com.parse.livequery.ParseLiveQueryClient

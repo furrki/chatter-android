@@ -1,12 +1,13 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.TextView
+import com.chatter.furrki.chatter.Models.Message
+import com.chatter.furrki.chatter.R
 
 import com.parse.ParseUser
 

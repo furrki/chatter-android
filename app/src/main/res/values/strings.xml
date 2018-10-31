@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Chatter</string>
+    <string name="parse_server_url">http://192.168.1.40:1337/parse/</string>
+    <string name="parse_app_id">myAppId</string>
     <string name="logout">Logout</string>
     <string name="title_activity_register">Register</string>
 

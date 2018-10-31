@@ -1,16 +1,15 @@
-package com.chatter.furrki.chatter
+package com.chatter.furrki.chatter.Activities
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.*
 import com.parse.*
-import android.support.design.widget.CoordinatorLayout.Behavior.setTag
 import android.view.*
-import android.widget.TextView
+import com.chatter.furrki.chatter.Adapters.RoomListViewAdapter
+import com.chatter.furrki.chatter.Models.Room
+import com.chatter.furrki.chatter.R
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
 
@@ -44,8 +43,8 @@ class HomeActivity : AppCompatActivity() {
 
         val parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient()
 
-        var parseQuery = ParseQuery.getQuery<Room>("Room")
-        var subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery)
+        val parseQuery = ParseQuery.getQuery<Room>("Room")
+        val subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { query, room ->
 
@@ -87,13 +86,13 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.main_menu_add_chat -> {
-                val intent = Intent(this,AddChat::class.java)
+                val intent = Intent(this, AddChat::class.java)
                 startActivity(intent)
                 return true
             }
             R.id.main_menu_logout -> {
                 ParseUser.logOut()
-                val intent = Intent(this,MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
                 return true
