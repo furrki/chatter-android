@@ -26,12 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light">
-        <meta-data
-            android:name="com.parse.SERVER_URL"
-            android:value="@string/parse_server_url" />
-        <meta-data
-            android:name="com.parse.APPLICATION_ID"
-            android:value="@string/parse_app_id" />
+
 
         <activity android:name=".MainActivity">
             <intent-filter>
