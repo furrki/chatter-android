@@ -29,6 +29,7 @@
                 android:id="@+id/chatText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Message.."

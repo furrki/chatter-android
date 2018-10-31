@@ -28,9 +28,10 @@
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="Murtaza"
-                android:textSize="24sp" />
+                android:textColor="000"
+                android:textSize="14sp" />
         </LinearLayout>
 
 
