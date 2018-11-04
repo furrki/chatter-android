@@ -15,7 +15,6 @@ import com.parse.livequery.SubscriptionHandling
 
 
 class HomeActivity : AppCompatActivity() {
-
     private var listViewAdapter: RoomListViewAdapter? = null
     private var persons: ArrayList<Room>? = null
     lateinit var roomList: ListView

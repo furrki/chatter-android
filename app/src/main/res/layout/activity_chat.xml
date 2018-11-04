@@ -27,17 +27,26 @@
 
             <EditText
                 android:id="@+id/chatText"
-                android:layout_width="wrap_content"
+                android:layout_width="253dp"
                 android:layout_height="wrap_content"
-                android:focusableInTouchMode="true"
                 android:layout_weight="1"
                 android:ems="10"
+                android:focusableInTouchMode="true"
                 android:hint="Message.."
                 android:inputType="textPersonName" />
 
             <ImageButton
+                android:id="@+id/galleryBtn"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <ImageButton
                 android:id="@+id/sendBtn"
-                android:layout_width="4dp"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 app:srcCompat="@android:drawable/ic_menu_send" />

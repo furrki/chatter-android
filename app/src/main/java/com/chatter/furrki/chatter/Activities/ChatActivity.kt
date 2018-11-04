@@ -9,12 +9,15 @@ import android.widget.ListView
 import com.chatter.furrki.chatter.Adapters.ChatListViewAdapter
 import com.chatter.furrki.chatter.Models.Message
 import com.chatter.furrki.chatter.R
-import com.parse.ParseObject
-import com.parse.ParseQuery
-import com.parse.FunctionCallback
-import com.parse.ParseCloud
 import com.parse.livequery.ParseLiveQueryClient
 import com.parse.livequery.SubscriptionHandling
+import android.content.Intent
+import android.R.attr.data
+import android.graphics.Bitmap
+import android.provider.MediaStore
+import com.parse.*
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 
 
 class ChatActivity : AppCompatActivity() {
@@ -24,7 +27,30 @@ class ChatActivity : AppCompatActivity() {
     lateinit var chatList : ListView
     lateinit var msgEt : EditText
     private var listViewAdapter: ChatListViewAdapter? = null
+    var imgFile: ParseFile? = null
+    val PICK_IMAGE = 1
 
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == PICK_IMAGE) {
+            if (data != null) {
+                try {
+                    val mainBitmap = MediaStore.Images.Media.getBitmap(applicationContext.contentResolver, data.data)
+                    var bytes = ByteArrayOutputStream()
+                    mainBitmap!!.compress(Bitmap.CompressFormat.JPEG, 70, bytes)
+                    var imageBytes = bytes.toByteArray()
+                    imgFile = ParseFile("resume.jpg", imageBytes)
+                    //val thb = Bitmap.createScaledBitmap(mainBitmap!!, 160, 169, true)
+
+                   // bytes = ByteArrayOutputStream()
+                   // thb.compress(Bitmap.CompressFormat.JPEG, 60, bytes)
+                  //  thbBytes = bytes.toByteArray()
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -32,6 +58,7 @@ class ChatActivity : AppCompatActivity() {
         chatList = findViewById(R.id.chatList)
         msgEt = findViewById(R.id.chatText)
         val sendBtn = findViewById<ImageButton>(R.id.sendBtn)
+        val galleryBtn = findViewById<ImageButton>(R.id.galleryBtn)
 
         chatId = intent.getStringExtra("chatId")
 
@@ -46,6 +73,12 @@ class ChatActivity : AppCompatActivity() {
 
         sendBtn.setOnClickListener {
             sendMessage()
+        }
+        galleryBtn.setOnClickListener {
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
     }
     fun retrieveMsgs(){
@@ -87,13 +120,24 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage(){
-        val params = HashMap<String, Any>()
-        params["room"] = this.room.objectId
-        params["text"] = msgEt.text.toString()
-        ParseCloud.callFunctionInBackground("sendMsg", params, FunctionCallback<String> { ratings, e ->
-            if (e == null) {
-                this@ChatActivity.msgEt.text.clear()
-            }
+        val msg = Message()
+        msg.put("Room", this.room)
+        msg.put("Text",  msgEt.text.toString())
+        msg.put("Owner",  ParseUser.getCurrentUser())
+        if(imgFile != null) {
+            msg.put("Image", imgFile!!)
+            imgFile!!.save()
+        }
+        msg.saveInBackground( SaveCallback { e ->
+                if (e == null) {
+                    this@ChatActivity.msgEt.text.clear()
+                    this@ChatActivity.imgFile = null
+                } else {
+                    e.printStackTrace()
+                }
         })
+
+
+
     }
 }
