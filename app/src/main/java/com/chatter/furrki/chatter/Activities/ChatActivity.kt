@@ -3,9 +3,6 @@ package com.chatter.furrki.chatter.Activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ListView
 import com.chatter.furrki.chatter.Adapters.ChatListViewAdapter
 import com.chatter.furrki.chatter.Models.Message
 import com.chatter.furrki.chatter.R
@@ -14,17 +11,23 @@ import com.parse.livequery.SubscriptionHandling
 import android.content.Intent
 import android.R.attr.data
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
+import android.support.v7.appcompat.R.id.scrollView
 import android.view.View
+import android.view.ViewTreeObserver
+import android.widget.*
 import com.chatter.furrki.chatter.Models.Room
 import com.parse.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import kotlinx.android.synthetic.main.activity_chat.*
+import java.security.AccessController.getContext
 import android.widget.AbsListView
-
-
+import android.widget.AbsListView.OnScrollListener.SCROLL_STATE_FLING
 
 
 class ChatActivity : AppCompatActivity() {
@@ -32,9 +35,11 @@ class ChatActivity : AppCompatActivity() {
     lateinit var room: Room
     lateinit var chatList: ListView
     lateinit var msgEt: EditText
+    lateinit var galleryButton: ImageButton
     private var listViewAdapter: ChatListViewAdapter? = null
     var imgFile: ParseFile? = null
     val PICK_IMAGE = 1
+    var isSending = false
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == PICK_IMAGE) {
@@ -45,6 +50,7 @@ class ChatActivity : AppCompatActivity() {
                     mainBitmap!!.compress(Bitmap.CompressFormat.JPEG, 70, bytes)
                     var imageBytes = bytes.toByteArray()
                     imgFile = ParseFile("resume.jpg", imageBytes)
+                    galleryButton.background =  ColorDrawable(Color.parseColor("#AAAAAAAA"))
                     //val thb = Bitmap.createScaledBitmap(mainBitmap!!, 160, 169, true)
 
                     // bytes = ByteArrayOutputStream()
@@ -66,7 +72,7 @@ class ChatActivity : AppCompatActivity() {
         chatList = findViewById(R.id.chatList)
         msgEt = findViewById(R.id.chatText)
         val sendBtn = findViewById<ImageButton>(R.id.sendBtn)
-        val galleryBtn = findViewById<ImageButton>(R.id.galleryBtn)
+        galleryButton = findViewById(R.id.galleryBtn)
 
         chatId = intent.getStringExtra("chatId")
 
@@ -93,7 +99,27 @@ class ChatActivity : AppCompatActivity() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
+        2
 
+        chatList.setOnScrollListener(object : AbsListView.OnScrollListener {
+            private var firstVisibleItem = 0
+            private var lastY = 0
+            override fun onScrollStateChanged(view:AbsListView, scrollState:Int) {
+                if(scrollState == SCROLL_STATE_FLING && this.firstVisibleItem <= 1){
+                    room.loadNext {
+                        listViewAdapter!!.notifyDataSetChanged()
+                    }
+                }
+            }
+            override fun onScroll(view:AbsListView, firstVisibleItem:Int, visibleItemCount:Int, totalItemCount:Int) {
+                this.firstVisibleItem = firstVisibleItem
+            }
+
+        })
+    }
+
+    private fun listIsAtTop(): Boolean {
+        return if (chatList.childCount == 0) true else chatList.getChildAt(0).top == 0
     }
     fun listenToMessages(){
         val parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient()
@@ -120,23 +146,28 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage(){
-        if(msgEt.text.toString().trim() != "" || imgFile != null){
-            val msg = Message()
-            msg.put("Room", this.room)
-            msg.put("Text",  msgEt.text.toString())
-            msg.put("Owner",  ParseUser.getCurrentUser())
-            if(imgFile != null) {
-                msg.put("Image", imgFile!!)
-                imgFile!!.save()
-            }
-            msg.saveInBackground( SaveCallback { e ->
-                if (e == null) {
-                    this@ChatActivity.msgEt.text.clear()
-                    this@ChatActivity.imgFile = null
-                } else {
-                    e.printStackTrace()
+        if(!isSending) {
+            if (msgEt.text.toString().trim() != "" || imgFile != null) {
+
+                isSending = true
+                val msg = Message()
+                msg.put("Room", this.room)
+                msg.put("Text", msgEt.text.toString())
+                msg.put("Owner", ParseUser.getCurrentUser())
+                if (imgFile != null) {
+                    msg.put("Image", imgFile!!)
+                    imgFile!!.save()
                 }
-            })
+                msg.saveInBackground(SaveCallback { e ->
+                    if (e == null) {
+                        this@ChatActivity.msgEt.text.clear()
+                        this@ChatActivity.imgFile = null
+                    } else {
+                        e.printStackTrace()
+                    }
+                    isSending = false
+                })
+            }
         }
     }
 }

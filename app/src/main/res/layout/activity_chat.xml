@@ -10,8 +10,9 @@
     <ListView
         android:id="@+id/chatList"
         android:layout_width="match_parent"
-        android:layout_height="442dp"
-        android:layout_marginBottom="1dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="3dp"
         android:divider="@null"
         android:dividerHeight="0dp"
         android:paddingBottom="2dp"
@@ -36,13 +37,12 @@
         android:paddingTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
             android:id="@+id/chatText"
             android:layout_width="235dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/rounded_corners"
             android:ems="10"
@@ -56,10 +56,11 @@
         <ImageButton
             android:id="@+id/galleryBtn"
             android:layout_width="42dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:background="#00000000"
             app:layout_constraintBottom_toBottomOf="@+id/chatText"
             app:layout_constraintTop_toTopOf="@+id/chatText"
             app:srcCompat="@android:drawable/ic_menu_gallery"
@@ -68,8 +69,9 @@
         <ImageButton
             android:id="@+id/sendBtn"
             android:layout_width="42dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="#00000000"
             app:layout_constraintBottom_toBottomOf="@+id/galleryBtn"
             app:layout_constraintTop_toTopOf="@+id/galleryBtn"
             app:srcCompat="@android:drawable/ic_menu_send"

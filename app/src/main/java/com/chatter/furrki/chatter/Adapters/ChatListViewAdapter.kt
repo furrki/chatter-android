@@ -46,7 +46,7 @@ class ChatListViewAdapter(context: Context, private val room: Room) : ArrayAdapt
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        if(position == 0){
+        /*if(position == 0){
             (parent as ListView).post {
                 // Select the last row so it will scroll into view...
                 (parent).setSelection(3)
@@ -55,7 +55,7 @@ class ChatListViewAdapter(context: Context, private val room: Room) : ArrayAdapt
                 this.notifyDataSetChanged()
 
             }
-        }
+        }*/
         var convertView = convertView
 
         val msg = this.room.messages[position]
