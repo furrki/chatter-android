@@ -73,6 +73,9 @@ class ChatActivity : AppCompatActivity() {
         val query = ParseQuery.getQuery<ParseObject>("Room")
         this.room = query.get(chatId) as Room
 
+        supportActionBar!!.title = this.room.opUser.username
+
+
         listViewAdapter = ChatListViewAdapter(this, room)
         chatList.adapter = listViewAdapter
 
@@ -91,11 +94,6 @@ class ChatActivity : AppCompatActivity() {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
 
-    }
-    fun loadMore() {
-        room.loadNext {
-            listViewAdapter!!.notifyDataSetChanged()
-        }
     }
     fun listenToMessages(){
         val parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient()

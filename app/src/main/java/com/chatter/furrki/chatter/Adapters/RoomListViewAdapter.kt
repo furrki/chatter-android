@@ -55,7 +55,7 @@ class RoomListViewAdapter(context: Context, private val rooms: ArrayList<Room>) 
         val room = rooms[position]
         if (room != null) {
             //holder.userimage.setImageResource();
-            val members = room.getMembers()
+            val members = room.members
             var other = ParseUser.getCurrentUser()
 
             if (members[0].objectId == other.objectId) {
