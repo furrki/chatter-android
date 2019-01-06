@@ -103,9 +103,10 @@ class ChatActivity : AppCompatActivity() {
 
         chatList.setOnScrollListener(object : AbsListView.OnScrollListener {
             private var firstVisibleItem = 0
-            private var lastY = 0
             override fun onScrollStateChanged(view:AbsListView, scrollState:Int) {
-                if(scrollState == SCROLL_STATE_FLING && this.firstVisibleItem <= 1){
+                Log.d("ListView", firstVisibleItem.toString())
+                Log.d("State", scrollState.toString())
+                if( this.firstVisibleItem <= 1){
                     room.loadNext {
                         listViewAdapter!!.notifyDataSetChanged()
                     }
