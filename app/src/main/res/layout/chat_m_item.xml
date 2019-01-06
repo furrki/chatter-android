@@ -11,7 +11,7 @@
         android:id="@+id/chatTw"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_green_light"
+        android:background="@color/green"
         android:gravity="left"
         android:padding="8dp"
         android:text="TextView" />
