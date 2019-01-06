@@ -122,24 +122,23 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage(){
-        val msg = Message()
-        msg.put("Room", this.room)
-        msg.put("Text",  msgEt.text.toString())
-        msg.put("Owner",  ParseUser.getCurrentUser())
-        if(imgFile != null) {
-            msg.put("Image", imgFile!!)
-            imgFile!!.save()
-        }
-        msg.saveInBackground( SaveCallback { e ->
+        if(msgEt.text.toString().trim() != "" || imgFile != null){
+            val msg = Message()
+            msg.put("Room", this.room)
+            msg.put("Text",  msgEt.text.toString())
+            msg.put("Owner",  ParseUser.getCurrentUser())
+            if(imgFile != null) {
+                msg.put("Image", imgFile!!)
+                imgFile!!.save()
+            }
+            msg.saveInBackground( SaveCallback { e ->
                 if (e == null) {
                     this@ChatActivity.msgEt.text.clear()
                     this@ChatActivity.imgFile = null
                 } else {
                     e.printStackTrace()
                 }
-        })
-
-
-
+            })
+        }
     }
 }
