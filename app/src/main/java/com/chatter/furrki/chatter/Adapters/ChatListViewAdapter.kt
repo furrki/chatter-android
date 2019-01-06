@@ -4,8 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.chatter.furrki.chatter.Models.Message
 import com.chatter.furrki.chatter.R
 
@@ -15,15 +13,17 @@ import kotlinx.android.synthetic.main.chat_o_item.view.*
 import java.util.ArrayList
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
-import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.*
+import com.chatter.furrki.chatter.Models.Room
 import com.parse.GetDataCallback
 import com.parse.ParseException
 import com.parse.ParseFile
 
 
 
-class ChatListViewAdapter(context: Context, private val msgs: ArrayList<Message>) : ArrayAdapter<Message>(context, 0, msgs) {
+
+
+class ChatListViewAdapter(context: Context, private val room: Room) : ArrayAdapter<Message>(context, 0) {
 
     private val inflater: LayoutInflater
     private var holder: ViewHolder? = null
@@ -33,21 +33,32 @@ class ChatListViewAdapter(context: Context, private val msgs: ArrayList<Message>
     }
 
     override fun getCount(): Int {
-        return msgs.size
+        return this.room.messages.size
     }
 
     override fun getItem(position: Int): Message? {
-        return msgs[position]
+
+        return this.room.messages[position]
     }
 
     override fun getItemId(position: Int): Long {
-        return msgs[position].hashCode().toLong()
+        return this.room.messages[position].hashCode().toLong()
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        if(position == 0){
+            (parent as ListView).post {
+                // Select the last row so it will scroll into view...
+                (parent).setSelection(3)
+            }
+            room.loadNext {
+                this.notifyDataSetChanged()
+
+            }
+        }
         var convertView = convertView
 
-        val msg = msgs[position]
+        val msg = this.room.messages[position]
 
         if (msg.owner().objectId == ParseUser.getCurrentUser().objectId) {
 
@@ -58,15 +69,21 @@ class ChatListViewAdapter(context: Context, private val msgs: ArrayList<Message>
         }
 
         holder = ViewHolder()
-        holder!!.content = convertView.findViewById<View>(R.id.chatTw) as TextView
         holder!!.img = convertView.findViewById<View>(R.id.atimg) as ImageView
         convertView.tag = holder
 
         val content = msg.text()
 
+        if(content != ""){
+            holder!!.content = convertView.findViewById<View>(R.id.chatTw) as TextView
+            holder!!.content!!.text = content
+        } else {
 
-        holder!!.content!!.text = content
+            holder!!.content = convertView.findViewById<View>(R.id.chatTw) as TextView
+            (holder!!.content!!.parent as ViewGroup).removeView(holder!!.content)
+        }
         if(msg.hasImage){
+
             holder!!.img!!.setImageBitmap(msg.imgBitmap)
         }
         else

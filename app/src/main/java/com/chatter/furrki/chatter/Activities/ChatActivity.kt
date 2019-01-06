@@ -14,18 +14,24 @@ import com.parse.livequery.SubscriptionHandling
 import android.content.Intent
 import android.R.attr.data
 import android.graphics.Bitmap
+import android.os.Build
 import android.provider.MediaStore
+import android.support.annotation.RequiresApi
+import android.view.View
+import com.chatter.furrki.chatter.Models.Room
 import com.parse.*
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import android.widget.AbsListView
+
+
 
 
 class ChatActivity : AppCompatActivity() {
     var chatId = ""
-    lateinit var room : ParseObject
-    var msgs = ArrayList<Message>()
-    lateinit var chatList : ListView
-    lateinit var msgEt : EditText
+    lateinit var room: Room
+    lateinit var chatList: ListView
+    lateinit var msgEt: EditText
     private var listViewAdapter: ChatListViewAdapter? = null
     var imgFile: ParseFile? = null
     val PICK_IMAGE = 1
@@ -41,9 +47,9 @@ class ChatActivity : AppCompatActivity() {
                     imgFile = ParseFile("resume.jpg", imageBytes)
                     //val thb = Bitmap.createScaledBitmap(mainBitmap!!, 160, 169, true)
 
-                   // bytes = ByteArrayOutputStream()
-                   // thb.compress(Bitmap.CompressFormat.JPEG, 60, bytes)
-                  //  thbBytes = bytes.toByteArray()
+                    // bytes = ByteArrayOutputStream()
+                    // thb.compress(Bitmap.CompressFormat.JPEG, 60, bytes)
+                    //  thbBytes = bytes.toByteArray()
 
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -51,6 +57,8 @@ class ChatActivity : AppCompatActivity() {
             }
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
@@ -63,12 +71,14 @@ class ChatActivity : AppCompatActivity() {
         chatId = intent.getStringExtra("chatId")
 
         val query = ParseQuery.getQuery<ParseObject>("Room")
-        this.room = query.get(chatId)
+        this.room = query.get(chatId) as Room
 
-        listViewAdapter = ChatListViewAdapter(this, msgs)
+        listViewAdapter = ChatListViewAdapter(this, room)
         chatList.adapter = listViewAdapter
 
-        retrieveMsgs()
+        this.room.loadNext {
+            scrollMyListViewToBottom()
+        }
         listenToMessages()
 
         sendBtn.setOnClickListener {
@@ -80,22 +90,11 @@ class ChatActivity : AppCompatActivity() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
+
     }
-    fun retrieveMsgs(){
-        val query = ParseQuery.getQuery<Message>("Message")
-        query.whereEqualTo("Room", this.room)
-        query.findInBackground { messages, e ->
-            if (e == null) {
-                msgs = messages as ArrayList<Message>
-                for(msg: Message in msgs){
-                    listViewAdapter!!.add(msg)
-                }
-                scrollMyListViewToBottom()
-
-
-            } else {
-                Log.d("score", "Error: " + e.message)
-            }
+    fun loadMore() {
+        room.loadNext {
+            listViewAdapter!!.notifyDataSetChanged()
         }
     }
     fun listenToMessages(){
@@ -106,9 +105,12 @@ class ChatActivity : AppCompatActivity() {
         val subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery)
 
         subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE) { query, msg ->
-            listViewAdapter!!.add(msg)
-            listViewAdapter!!.notifyDataSetChanged()
-            scrollMyListViewToBottom()
+
+            this@ChatActivity.runOnUiThread {
+                this.room.messages.add(msg)
+                listViewAdapter!!.notifyDataSetChanged()
+                scrollMyListViewToBottom()
+            }
         }
     }
 
