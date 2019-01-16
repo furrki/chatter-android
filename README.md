@@ -15,5 +15,4 @@ After installing and running [The Server Repository](https://github.com/furrki/c
 ![Alt text](Screenshots/ss1.jpeg?raw=true "Main Screen 2")
 
 # Author
-furrki
-furkankaynary@gmail.com
+furrki -- furkankaynary@gmail.com
