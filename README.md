@@ -13,3 +13,7 @@ After installing and running [The Server Repository](https://github.com/furrki/c
 # Screenshots
 ![Alt text](Screenshots/ss2.jpeg?raw=true "Main Screen")
 ![Alt text](Screenshots/ss1.jpeg?raw=true "Main Screen 2")
+
+# Author
+furrki
+furkankaynary@gmail.com
